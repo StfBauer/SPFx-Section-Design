@@ -25,65 +25,50 @@ export default class SectionBackgroundWebPart extends BaseClientSideWebPart<ISec
   private _themeProvider: ThemeProvider;
   private _themeVariant: IReadonlyTheme | undefined;
 
-private setCSSVariables(theming: any) {
+  private setCSSVariables(theming: any) {
 
-  let themingKeys = Object.keys(theming);
+    let themingKeys = Object.keys(theming);
 
-  if (themingKeys !== null) {
+    if (themingKeys !== null) {
 
-    themingKeys.forEach(key => {
+      themingKeys.forEach(key => {
 
-      this.domElement.style.setProperty(`--${key}`, theming[key])
-
-    });
-
-  }
-
-}
-
-  private sementicColors(): void {
-    let semanticSlots = Object.keys(this._themeVariant.semanticColors);
-    if (semanticSlots !== null) {
-
-      semanticSlots.forEach(key => {
-
-        this.domElement.style.setProperty(`--${key}`, this._themeVariant.semanticColors[key])
+        this.domElement.style.setProperty(`--${key}`, theming[key])
 
       });
+
     }
-  }
-
-protected onInit(): Promise<void> {
-
-  // Consume the new ThemeProvider service
-  this._themeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey);
-
-  // If it exists, get the theme variant
-  this._themeVariant = this._themeProvider.tryGetTheme();
-
-  if (this._themeVariant) {
-
-    this.setCSSVariables(this._themeVariant.semanticColors);
-    // this.setCSSVariables(this._themeVariant.semanticColors);
-    // this.setCSSVariables(this._themeVariant.semanticColors);
-    // this.setCSSVariables(this._themeVariant.semanticColors);
 
   }
 
-  // debugger;
+  protected onInit(): Promise<void> {
 
-  // Register a handler to be notified if the theme variant changes
-  this._themeProvider.themeChangedEvent.add(this, this._handleThemeChangedEvent);
+    // Consume the new ThemeProvider service
+    this._themeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey);
 
-  return super.onInit();
+    // If it exists, get the theme variant
+    this._themeVariant = this._themeProvider.tryGetTheme();
 
-}
+    if (this._themeVariant) {
+
+      this.setCSSVariables(this._themeVariant.semanticColors);
+
+    }
+
+    // debugger;
+
+    // Register a handler to be notified if the theme variant changes
+    this._themeProvider.themeChangedEvent.add(this, this._handleThemeChangedEvent);
+
+    return super.onInit();
+
+  }
 
   /**
- * Update the current theme variant reference and re-render.
- *
- * @param args The new theme
- */
+   * Update the current theme variant reference and re-render.
+   *
+   * @param args The new theme
+   */
   private _handleThemeChangedEvent(args: ThemeChangedEventArgs): void {
 
     this._themeVariant = args.theme;
@@ -96,14 +81,7 @@ protected onInit(): Promise<void> {
 
     const semanticColors: Readonly<ISemanticColors> | undefined = this._themeVariant && this._themeVariant.semanticColors;
 
-    // const style: string = ` style="background-color:${semanticColors.bodyBackground}"`;
-
-    // this.domElement.innerHTML = `<p${'' || (this._themeProvider && style)}>this is a demo</p>`;
-
-    // const semanticColors: Readonly<ISemanticColors> | undefined = this._themeVariant && this._themeVariant.semanticColors;
-
     this.domElement.innerHTML = `
-
       <div ${this._themeProvider} class="${styles.sectionBackground}" data-load-themed-styles="true">
         <div class="${styles.container}">
           <div class="${styles.row}">
